@@ -4,8 +4,6 @@ import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import no.hvl.dat110.common.TODO;
-import no.hvl.dat110.common.Logger;
 import no.hvl.dat110.messagetransport.Connection;
 
 public class Storage {
@@ -50,49 +48,58 @@ public class Storage {
 
 	}
 
+	// add corresponding client session to the storage
 	public void addClientSession(String user, Connection connection) {
+		ClientSession session = new ClientSession(user, connection);
+		if(!clients.containsKey(user)){
+			clients.put(user, session);
+		}
 
-		// add corresponding client session to the storage
-		ClientSession session = clients.get(user);
-		clients.put(user, session);
 		
 	}
 
+	// remove client session for user from the storage
 	public void removeClientSession(String user) {
-
-		// remove client session for user from the storage
-		clients.remove(user);
+		if(clients.contains(user)) {
+			clients.remove(user);
+		}
 	}
 
+	// create topic in the storage
 	public void createTopic(String topic) {
-
-		// create topic in the storage
-		Set<String> subscribers = null;
-		subscriptions.put(topic,subscribers);
+		if(subscriptions.containsKey(topic)) {
+			Set<String> subscribers = ConcurrentHashMap.newKeySet();
+			subscriptions.put(topic, subscribers);
+		}
 	}
 
+	// delete topic from the storage
 	public void deleteTopic(String topic) {
 
-		// delete topic from the storage
-		subscriptions.remove(topic);
-		
+		if(subscriptions.containsKey(topic)) {
+			subscriptions.remove(topic);
+		}
 	}
 
+	// add the user as subscriber to the topic
 	public void addSubscriber(String user, String topic) {
 
-		// add the user as subscriber to the topic
-		Set<String> subscribers = getSubscribers(topic);
-		subscribers.add(user);
-		subscriptions.put(user, subscribers);
-		
+		if(subscriptions.containsKey(topic)) {
+			Set<String> subscribers = getSubscribers(topic);
+			subscribers.add(user);
+			subscriptions.put(user, subscribers);
+		}
 	}
 
+	// remove the user as subscriber to the topic
 	public void removeSubscriber(String user, String topic) {
 
-		// remove the user as subscriber to the topic
-		Set<String> subscribers = getSubscribers(topic);
-		subscribers.remove(user);
-		subscriptions.put(user, subscribers);
-
+		if(subscriptions.containsKey(topic)) {
+			Set<String> subscribers = getSubscribers(topic);
+			if(subscribers.contains(user)){
+				subscribers.remove(user);
+			}
+			subscriptions.put(user, subscribers);
+		}
 	}
 }

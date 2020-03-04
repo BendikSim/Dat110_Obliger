@@ -1,12 +1,16 @@
-package no.hvl.dat110.broker.processing.tests;
+package test.no.hvl.dat110.broker.processing.tests;
+
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 import no.hvl.dat110.broker.Broker;
 import no.hvl.dat110.broker.Dispatcher;
 import no.hvl.dat110.client.Client;
+import no.hvl.dat110.messages.Message;
+import no.hvl.dat110.messages.PublishMsg;
 
-public class Test5Subscribe extends Test0Base {
+public class Test6Publish extends Test0Base {
 
 	public static String TESTTOPIC = "testtopic";
 	
@@ -23,11 +27,16 @@ public class Test5Subscribe extends Test0Base {
 		
 		client.subscribe(TESTTOPIC);
 		
+		client.publish(TESTTOPIC, "message from client on topic");
+		
+		PublishMsg msg = (PublishMsg)client.receive();
+
 		client.unsubscribe(TESTTOPIC);
 		
 		client.disconnect();
+
+		assertEquals("message from client on topic",msg.getMessage());
 	
-		
 	}
 
 }

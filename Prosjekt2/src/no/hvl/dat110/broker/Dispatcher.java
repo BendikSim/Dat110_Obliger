@@ -108,11 +108,12 @@ public class Dispatcher extends Stopable {
 
 	public void onCreateTopic(CreateTopicMsg msg) {
 
+		String topic = msg.getUser();
+
 		Logger.log("onCreateTopic:" + msg.toString());
 
 		// create the topic in the broker storage
 		// the topic is contained in the create topic message
-		String topic = msg.getUser();
 		storage.createTopic(topic);
 
 	}
@@ -160,10 +161,15 @@ public class Dispatcher extends Stopable {
 		String topic = msg.getUser();
 		Set<String> subscribers = storage.getSubscribers(topic);
 		// messages must be sent used the corresponding client session objects
-		for(String user : subscribers) {
-			ClientSession session = storage.getSession(user);
-			session.send(msg);
-		}
+		for(ClientSession session : storage.getSessions()) {
 
+			for (String user : subscribers) {
+				if(session.getUser().equals(user)){
+					session.send(new PublishMsg(msg.getUser(), msg.getTopic(), msg.getMessage()));
+				}
+
+
+			}
+		}
 	}
 }

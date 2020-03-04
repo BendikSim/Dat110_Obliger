@@ -1,4 +1,4 @@
-package no.hvl.dat110.iotsystem.tests;
+package test.no.hvl.dat110.iotsystem.tests;
 
 import static org.junit.Assert.assertTrue;
 
