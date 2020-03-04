@@ -14,7 +14,7 @@ public class DisplayDevice {
 		System.out.println("Display starting ...");
 		
 		// TODO - START
-				
+				//hei
 		// create a client object and use it to
 		
 		// - connect to the broker
