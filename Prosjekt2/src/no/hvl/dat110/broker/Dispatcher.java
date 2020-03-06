@@ -108,7 +108,7 @@ public class Dispatcher extends Stopable {
 
 	public void onCreateTopic(CreateTopicMsg msg) {
 
-		String topic = msg.getUser();
+		String topic = msg.getTopic();
 
 		Logger.log("onCreateTopic:" + msg.toString());
 
@@ -124,7 +124,7 @@ public class Dispatcher extends Stopable {
 
 		// delete the topic from the broker storage
 		// the topic is contained in the delete topic message
-		String topic = msg.getUser();
+		String topic = msg.getTopic();
 		storage.deleteTopic(topic);
 	}
 
@@ -134,8 +134,9 @@ public class Dispatcher extends Stopable {
 
 		// subscribe user to the topic
 		// user and topic is contained in the subscribe message
-		String topic = msg.getUser();
-		storage.addSubscriber(msg.getUser(), topic);
+		String topic = msg.getTopic();
+		String user = msg.getUser();
+		storage.addSubscriber(user, topic);
 
 	}
 
@@ -145,8 +146,9 @@ public class Dispatcher extends Stopable {
 
 		// unsubscribe user to the topic
 		// user and topic is contained in the unsubscribe message
-		String topic = msg.getUser();
-		storage.removeSubscriber(msg.getUser(), topic);
+		String topic = msg.getTopic();
+		String user = msg.getUser();
+		storage.removeSubscriber(user, topic);
 
 
 	}
@@ -157,19 +159,10 @@ public class Dispatcher extends Stopable {
 
 		// publish the message to clients subscribed to the topic
 		// topic and message is contained in the subscribe message
-
-		String topic = msg.getUser();
-		Set<String> subscribers = storage.getSubscribers(topic);
-		// messages must be sent used the corresponding client session objects
-		for(ClientSession session : storage.getSessions()) {
-
-			for (String user : subscribers) {
-				if(session.getUser().equals(user)){
-					session.send(new PublishMsg(msg.getUser(), msg.getTopic(), msg.getMessage()));
-				}
-
-
+		String topic = msg.getTopic();
+		Set<String> subs = storage.getSubscribers(msg.getTopic());
+			for (String s : subs) {
+				storage.getSession(s).send(msg);
 			}
-		}
 	}
 }

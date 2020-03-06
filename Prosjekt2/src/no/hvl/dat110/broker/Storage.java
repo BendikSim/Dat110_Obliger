@@ -55,19 +55,18 @@ public class Storage {
 			clients.put(user, session);
 		}
 
-		
 	}
 
 	// remove client session for user from the storage
 	public void removeClientSession(String user) {
-		if(clients.contains(user)) {
+		if(clients.containsKey(user)) {
 			clients.remove(user);
 		}
 	}
 
 	// create topic in the storage
 	public void createTopic(String topic) {
-		if(subscriptions.containsKey(topic)) {
+		if(!subscriptions.containsKey(topic)) {
 			Set<String> subscribers = ConcurrentHashMap.newKeySet();
 			subscriptions.put(topic, subscribers);
 		}
@@ -85,9 +84,10 @@ public class Storage {
 	public void addSubscriber(String user, String topic) {
 
 		if(subscriptions.containsKey(topic)) {
-			Set<String> subscribers = getSubscribers(topic);
-			subscribers.add(user);
-			subscriptions.put(user, subscribers);
+			Set<String> hashset = subscriptions.get(topic);
+			if(!hashset.contains(user)){
+				hashset.add(user);
+			}
 		}
 	}
 
@@ -95,11 +95,10 @@ public class Storage {
 	public void removeSubscriber(String user, String topic) {
 
 		if(subscriptions.containsKey(topic)) {
-			Set<String> subscribers = getSubscribers(topic);
-			if(subscribers.contains(user)){
+			Set<String> subscribers = subscriptions.get(topic);
+			if(subscribers.contains(user)) {
 				subscribers.remove(user);
 			}
-			subscriptions.put(user, subscribers);
 		}
 	}
 }
