@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="no.hvl.dat110.rpc.tests" project="Prosjekt1" tests="9" started="1" failures="0" errors="0" ignored="0">
+  <testsuite name="no.hvl.dat110.rpc.tests.TestRPC" incomplete="true" displayname="TestRPC" uniqueid="[engine:junit-jupiter]/[class:no.hvl.dat110.rpc.tests.TestRPC]">
+    <testcase name="testAllCalls" classname="no.hvl.dat110.rpc.tests.TestRPC" incomplete="true" displayname="testAllCalls()" uniqueid="[engine:junit-jupiter]/[class:no.hvl.dat110.rpc.tests.TestRPC]/[method:testAllCalls()]"/>
+    <testcase name="testBoolCall" classname="no.hvl.dat110.rpc.tests.TestRPC" incomplete="true" displayname="testBoolCall()" uniqueid="[engine:junit-jupiter]/[class:no.hvl.dat110.rpc.tests.TestRPC]/[method:testBoolCall()]"/>
+    <testcase name="testStartStop" classname="no.hvl.dat110.rpc.tests.TestRPC" incomplete="true" displayname="testStartStop()" uniqueid="[engine:junit-jupiter]/[class:no.hvl.dat110.rpc.tests.TestRPC]/[method:testStartStop()]"/>
+    <testcase name="testVoidCall" classname="no.hvl.dat110.rpc.tests.TestRPC" incomplete="true" displayname="testVoidCall()" uniqueid="[engine:junit-jupiter]/[class:no.hvl.dat110.rpc.tests.TestRPC]/[method:testVoidCall()]"/>
+    <testcase name="testIntCall" classname="no.hvl.dat110.rpc.tests.TestRPC" incomplete="true" displayname="testIntCall()" uniqueid="[engine:junit-jupiter]/[class:no.hvl.dat110.rpc.tests.TestRPC]/[method:testIntCall()]"/>
+    <testcase name="testStringCall" classname="no.hvl.dat110.rpc.tests.TestRPC" incomplete="true" displayname="testStringCall()" uniqueid="[engine:junit-jupiter]/[class:no.hvl.dat110.rpc.tests.TestRPC]/[method:testStringCall()]"/>
+  </testsuite>
+  <testsuite name="no.hvl.dat110.rpc.tests.TestRPCUtils" incomplete="true" displayname="TestRPCUtils" uniqueid="[engine:junit-jupiter]/[class:no.hvl.dat110.rpc.tests.TestRPCUtils]">
+    <testcase name="testMarshallString" classname="no.hvl.dat110.rpc.tests.TestRPCUtils" incomplete="true" displayname="testMarshallString()" uniqueid="[engine:junit-jupiter]/[class:no.hvl.dat110.rpc.tests.TestRPCUtils]/[method:testMarshallString()]"/>
+    <testcase name="testMarshallInteger" classname="no.hvl.dat110.rpc.tests.TestRPCUtils" incomplete="true" displayname="testMarshallInteger()" uniqueid="[engine:junit-jupiter]/[class:no.hvl.dat110.rpc.tests.TestRPCUtils]/[method:testMarshallInteger()]"/>
+    <testcase name="testMarshallBoolean" classname="no.hvl.dat110.rpc.tests.TestRPCUtils" incomplete="true" displayname="testMarshallBoolean()" uniqueid="[engine:junit-jupiter]/[class:no.hvl.dat110.rpc.tests.TestRPCUtils]/[method:testMarshallBoolean()]"/>
+  </testsuite>
+</testrun>
