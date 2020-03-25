@@ -3,7 +3,6 @@ package no.hvl.dat110.broker;
 import java.util.Set;
 import java.util.Collection;
 
-import no.hvl.dat110.common.TODO;
 import no.hvl.dat110.common.Logger;
 import no.hvl.dat110.common.Stopable;
 import no.hvl.dat110.messages.*;
@@ -108,12 +107,11 @@ public class Dispatcher extends Stopable {
 
 	public void onCreateTopic(CreateTopicMsg msg) {
 
-		String topic = msg.getTopic();
-
 		Logger.log("onCreateTopic:" + msg.toString());
 
 		// create the topic in the broker storage
 		// the topic is contained in the create topic message
+		String topic = msg.getTopic();
 		storage.createTopic(topic);
 
 	}
@@ -159,10 +157,11 @@ public class Dispatcher extends Stopable {
 
 		// publish the message to clients subscribed to the topic
 		// topic and message is contained in the subscribe message
-		String topic = msg.getTopic();
-		Set<String> subs = storage.getSubscribers(msg.getTopic());
-			for (String s : subs) {
-				storage.getSession(s).send(msg);
+		Set<String> users = storage.getSubscribers(msg.getTopic());
+		System.out.println("-------------" + users);
+		System.out.println(users.toString());
+			for (String u : users) {
+					storage.getSession(u).send(msg);
+				}
 			}
-	}
 }
