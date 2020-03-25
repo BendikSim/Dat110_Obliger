@@ -50,8 +50,8 @@ public class Storage {
 
 	// add corresponding client session to the storage
 	public void addClientSession(String user, Connection connection) {
-		ClientSession session = new ClientSession(user, connection);
 		if(!clients.containsKey(user)){
+			ClientSession session = new ClientSession(user, connection);
 			clients.put(user, session);
 		}
 
@@ -83,7 +83,7 @@ public class Storage {
 	// add the user as subscriber to the topic
 	public void addSubscriber(String user, String topic) {
 
-		if(subscriptions.containsKey(topic)) {
+		if(subscriptions.containsKey(topic)){
 			Set<String> hashset = subscriptions.get(topic);
 			if(!hashset.contains(user)){
 				hashset.add(user);
@@ -94,10 +94,10 @@ public class Storage {
 	// remove the user as subscriber to the topic
 	public void removeSubscriber(String user, String topic) {
 
-		if(subscriptions.containsKey(topic)) {
-			Set<String> subscribers = subscriptions.get(topic);
-			if(subscribers.contains(user)) {
-				subscribers.remove(user);
+		if(getSubscribers(topic).contains(user)){
+			Set<String> hashset = subscriptions.get(topic);
+			if(hashset.contains(user)){
+				hashset.remove(user);
 			}
 		}
 	}

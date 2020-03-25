@@ -3,9 +3,11 @@ package test.no.hvl.dat110.broker.storage.tests;
 
 import no.hvl.dat110.broker.Storage;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
 
 import java.util.Set;
 
@@ -13,7 +15,7 @@ import java.util.Set;
 
 public class TestStorage {
 
-	private Storage storage;
+	protected Storage storage;
 	private static String TESTUSER = "testuser";
 	private static String TESTTOPIC = "testtopic";
 	
@@ -33,24 +35,25 @@ public class TestStorage {
 		
 		assertEquals(storage.getSessions().size(),1);
 		
-		Assertions.assertNotEquals(storage.getSession(TESTUSER),null);
+		Assert.assertNotEquals(storage.getSession(TESTUSER),null);
 	
 	}
 	
 	@Test
 	public void testremoveClientSession() {
-		
+
+		System.out.println("TEST");
 		storage.addClientSession(TESTUSER, null);
 		
 		assertEquals(storage.getSessions().size(),1);
 		
-		Assertions.assertNotEquals(storage.getSession(TESTUSER),null);
+		Assert.assertNotEquals(storage.getSession(TESTUSER),null);
 
 		storage.removeClientSession(TESTUSER);
 	
 		assertEquals(storage.getSessions().size(),0);
 		
-		Assertions.assertEquals(storage.getSession(TESTUSER),null);
+		Assert.assertEquals(storage.getSession(TESTUSER),null);
 	}
 
 	private void assertEquals(int size, Object i) {
@@ -65,7 +68,7 @@ public class TestStorage {
 		
 		assertEquals(topics.size(),1);
 
-		Assertions.assertTrue(topics.contains(TESTTOPIC));
+		Assert.assertTrue(topics.contains(TESTTOPIC));
 	}
 	
 	@Test
@@ -90,7 +93,7 @@ public class TestStorage {
 		
 		assertEquals(subscribers.size(),1);
 		
-		Assertions.assertTrue(subscribers.contains(TESTUSER));
+		Assert.assertTrue(subscribers.contains(TESTUSER));
 		
 	}
 	
@@ -110,8 +113,8 @@ public class TestStorage {
 		
 		assertEquals(subscribers.size(),2);
 		
-		Assertions.assertTrue(subscribers.contains(TESTUSER1));
-		Assertions.assertTrue(subscribers.contains(TESTUSER2));
+		Assert.assertTrue(subscribers.contains(TESTUSER1));
+		Assert.assertTrue(subscribers.contains(TESTUSER2));
 		
 	}
 	
@@ -132,8 +135,8 @@ public class TestStorage {
 		
 		assertEquals(subscribers.size(),1);
 		
-		Assertions.assertTrue(subscribers.contains(TESTUSER1));
-		Assertions.assertFalse(subscribers.contains(TESTUSER2));
+		Assert.assertTrue(subscribers.contains(TESTUSER1));
+		Assert.assertFalse(subscribers.contains(TESTUSER2));
 		
 	}
 	
