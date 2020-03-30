@@ -17,7 +17,7 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import no.hvl.dat110.node.client.test.FileDistributorClient;
+import no.hvl.dat110.utility.FileDistributorClient;
 import no.hvl.dat110.rpc.interfaces.NodeInterface;
 import no.hvl.dat110.util.Util;
 
