@@ -39,7 +39,7 @@ public class ChordLookup {
 		// if logic returns true, then return the successor
 		// if logic returns false; call findHighestPredecessor(key)
 		// do highest_pred.findSuccessor(key) - This is a recursive call until logic returns true
-		assert stub != null;
+
 		if (Util.computeLogic(key, this.node.getNodeID().add(new BigInteger("1")), stub.getNodeID())) {
 			return stub;
 		} else {
@@ -63,14 +63,13 @@ public class ChordLookup {
 		// starting from the last entry, iterate over the finger table
 		for (int i = fingerTable.size()-1; i >= 0; i--) {
 			// for each finger, obtain a stub from the registry
-			NodeInterface finger = fingerTable.get(i);
-			NodeInterface fingerStub = Util.getProcessStub(finger.getNodeName(), finger.getPort());
+			NodeInterface nodeID = fingerTable.get(i);
+			NodeInterface finger = Util.getProcessStub(nodeID.getNodeName(), nodeID.getPort());
 
 			// check that finger is a member of the set {nodeID+1,...,ID-1} i.e. (nodeID+1 <= finger <= key-1) using the ComputeLogic
 			// if logic returns true, then return the finger (means finger is the closest to key)
-			assert fingerStub != null;
-			if (Util.computeLogic(fingerStub.getNodeID(), this.node.getNodeID().add(new BigInteger("1")), key.subtract(new BigInteger("1")))) {
-				return fingerStub;
+			if (Util.computeLogic(finger.getNodeID(), this.node.getNodeID().add(new BigInteger("1")), key.subtract(new BigInteger("1")))) {
+				return finger;
 			}
 		}
 
