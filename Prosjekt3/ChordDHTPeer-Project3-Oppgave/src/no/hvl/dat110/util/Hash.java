@@ -14,21 +14,23 @@ import java.security.NoSuchAlgorithmException;
 
 public class Hash {
 
-	public static int mbit = 128;			// using SHA-1 compresses/hashes to 160bits
-
-	public static int sbit = 4;			// we use this for the size of the finger table
 	
 	private static BigInteger hashint; 
 	
 	public static BigInteger hashOf(String entity) {
 		
 		// Task: Hash a given string using MD5 and return the result as a BigInteger.
-
+		MessageDigest md = null;
 		try{
 			// we use MD5 with 128 bits digest
-			MessageDigest md = MessageDigest.getInstance("MD5");
+			md = MessageDigest.getInstance("MD5");
+		}catch (NoSuchAlgorithmException e){
+			e.printStackTrace();
+		}
+
+			byte[] entityByte = entity.getBytes();
 			// compute the hash of the input 'entity'
-			byte[] digest = md.digest(entity.getBytes("utf8"));
+			byte[] digest = md.digest(entityByte);
 
 			// convert the hash into hex format
 			String hex = toHex(digest);
@@ -36,9 +38,7 @@ public class Hash {
 			// convert the hex into BigInteger
 			hashint = new BigInteger(hex, 16);
 
-		}catch (NoSuchAlgorithmException | UnsupportedEncodingException e){
-			e.printStackTrace();
-		}
+
 		// return the BigInteger
 		
 		return hashint;
@@ -48,26 +48,35 @@ public class Hash {
 		
 		// Task: compute the address size of MD5
 		// get the digest length
+		MessageDigest md = null;
+		try {
+			md = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
 
-		int bytes = hashint.bitLength();
-
-		//BigInteger modulos= new BigInteger("2");
+		//get digest length
+		int bytes = md.getDigestLength();
 
 		// compute the number of bits = digest length * 8
 		bytes = bytes*8;
 		// compute the address size = 2 ^ number of bits
-		BigInteger addressSize = new BigInteger(String.valueOf(Math.pow(2, bytes)));
+		BigInteger addressSize = BigInteger.valueOf(2).pow(bytes);
 		// return the address size
 		
 		return addressSize;
 	}
 	
 	public static int bitSize() {
-		
-		int digestlen = 0;
-		
+		MessageDigest md = null;
+		try {
+			md = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+
 		// find the digest length
-		digestlen = addressSize().bitLength();
+		int digestlen = md.getDigestLength();
 
 		return digestlen*8;
 	}

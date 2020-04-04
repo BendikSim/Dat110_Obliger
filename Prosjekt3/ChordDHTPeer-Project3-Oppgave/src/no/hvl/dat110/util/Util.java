@@ -6,6 +6,7 @@ package no.hvl.dat110.util;
  * @author tdoy
  */
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -24,8 +25,8 @@ import no.hvl.dat110.rpc.interfaces.NodeInterface;
 public class Util {
 	 
 	public static String activeIP = null;
-	public static int numReplicas = 4;  
-	
+	public static int numReplicas = 4;
+
 	/**
 	 * This method computes (lower <= id <= upper).
 	 * To use this method to compute (lower < id <= upper), ensure that the calling method increased the lower param by 1.
@@ -37,15 +38,25 @@ public class Util {
 	 * @return true if (lower <= id <= upper) or false otherwise
 	 */
 	public static boolean computeLogic(BigInteger id, BigInteger lower, BigInteger upper) {
-		
-		// a formula to check whether an id falls within the set {lower, upper} using the address size as our bound (modulos operation)
-		// it modifies 'upper' and 'id' when lower > upper e.g. set (6, 2) in mod 10 = {6, 7, 8, 9, 0, 1, 2}
-		
-		// implement: read the descriptions above
-		boolean cond = false;
 
-		
+		//Lager modulo fra adressSize();
+		boolean cond = false;
+		BigInteger modulo = Hash.addressSize();
+
+		if (lower.compareTo(upper) > 0) {
+			if (id.compareTo(new BigInteger("0")) >= 0 && id.compareTo(upper) <= 0) {
+				id = id.add(modulo);
+			}
+
+			upper = upper.add(modulo);
+		}
+
+		if ((lower.compareTo(id) <= 0) && (id.compareTo(upper) <= 0)) {
+			cond = true;
+		}
+
 		return cond;
+
 	}
 	
 	public static List<String> toString(List<NodeInterface> list) throws RemoteException {

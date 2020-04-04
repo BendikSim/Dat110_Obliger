@@ -57,19 +57,28 @@ public class FileManager {
 		// implement
 		
 		// set a loop where size = numReplicas
+		for(int i=0; i < numReplicas; i++){
+			// replicate by adding the index to filename
+			String replica = filename + i;
+
+			// hash the replica
+			hash = Hash.hashOf(replica);
+
+			// store the hash in the replicafiles array.
+			replicafiles[i] = hash;
+		}
 		
-		// replicate by adding the index to filename
+
 		
-		// hash the replica
+
 		
-		// store the hash in the replicafiles array.
+
 
 	}
 	
     /**
      * 
-     * @param bytesOfFile
-     * @throws RemoteException 
+     * @throws RemoteException
      */
     public int distributeReplicastoPeers() throws RemoteException {
     	int counter = 0;
@@ -233,7 +242,7 @@ public class FileManager {
 		return sizeOfByte;
 	}
 	/**
-	 * @param size the size to set
+	 * @param sizeOfByte the size to set
 	 */
 	public void setSizeOfByte(String sizeOfByte) {
 		this.sizeOfByte = sizeOfByte;
