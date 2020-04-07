@@ -32,7 +32,7 @@ class DHTTestKeys {
 	Map<String, List<BigInteger>> nodeKeys;
 	
 	/**
-	 * @throws Exception
+	 * @throws java.lang.Exception
 	 */
 	@BeforeEach
 	void setUp() throws Exception {

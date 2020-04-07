@@ -19,6 +19,7 @@ import java.util.Random;
 import java.util.Set;
 
 import no.hvl.dat110.middleware.Message;
+import no.hvl.dat110.middleware.Node;
 import no.hvl.dat110.rpc.interfaces.NodeInterface;
 import no.hvl.dat110.util.Hash;
 
@@ -75,7 +76,8 @@ public class FileManager {
 
 
 	}
-	
+
+	//Task 4
     /**
      * 
      * @throws RemoteException
@@ -84,25 +86,31 @@ public class FileManager {
     	int counter = 0;
     	
     	// Task1: Given a filename, make replicas and distribute them to all active peers such that: pred < replica <= peer
-    	
+
     	// Task2: assign a replica as the primary for this file. Hint, see the slide (project 3) on Canvas
     	
     	// create replicas of the filename
-    	
+    	createReplicaFiles();
 		// iterate over the replicas
-    	
-    	// for each replica, find its successor by performing findSuccessor(replica)
-    	
-    	// call the addKey on the successor and add the replica
-    	
-    	// call the saveFileContent() on the successor
-    	
-    	// increment counter
-    	
-    		
+
+    	// for each replica,
+		for(BigInteger replica : replicafiles){
+
+			//find its successor by performing findSuccessor(replica)
+			NodeInterface successor = chordnode.findSuccessor(replica);
+			// call the addKey on the successor and add the replica
+			successor.addKey(replica);
+			// call the saveFileContent() on the successor
+			successor.saveFileContent(filename, replica, bytesOfFile, false );
+			// increment counter
+			counter++;
+		}
+
 		return counter;
     }
-	
+
+
+    //task 5
 	/**
 	 * 
 	 * @param filename
@@ -116,10 +124,17 @@ public class FileManager {
 		// Task: Given a filename, find all the peers that hold a copy of this file
 		
 		// generate the N replicas from the filename by calling createReplicaFiles()
+		createReplicaFiles();
 		
 		// it means, iterate over the replicas of the file
 		
-		// for each replica, do findSuccessor(replica) that returns successor s.
+		// for each replica,
+		for(BigInteger replica : replicafiles){
+			//do findSuccessor(replica) that returns successor s.
+			NodeInterface successor = chordnode.findSuccessor(replica);
+
+
+		}
 		
 		// get the metadata (Message) of the replica from the successor, s (i.e. active peer) of the file
 		
