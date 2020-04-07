@@ -88,6 +88,8 @@ public class FileManager {
     	// Task1: Given a filename, make replicas and distribute them to all active peers such that: pred < replica <= peer
 
     	// Task2: assign a replica as the primary for this file. Hint, see the slide (project 3) on Canvas
+		Random random = new Random();
+		int index = random.nextInt(Util.numReplicas-1);
     	
     	// create replicas of the filename
     	createReplicaFiles();
@@ -101,7 +103,11 @@ public class FileManager {
 			// call the addKey on the successor and add the replica
 			successor.addKey(replica);
 			// call the saveFileContent() on the successor
-			successor.saveFileContent(filename, replica, bytesOfFile, false );
+			if(counter == index) {
+				successor.saveFileContent(filename, replica, bytesOfFile, true);
+			}else{
+				successor.saveFileContent(filename, replica, bytesOfFile, false);
+			}
 			// increment counter
 			counter++;
 		}
@@ -132,14 +138,12 @@ public class FileManager {
 		for(BigInteger replica : replicafiles){
 			//do findSuccessor(replica) that returns successor s.
 			NodeInterface successor = chordnode.findSuccessor(replica);
-
+			// get the metadata (Message) of the replica from the successor, s (i.e. active peer) of the file
+			Message metadata = successor.getFilesMetadata(replica);
+					// save the metadata in the set succinfo.
+					succinfo.add(metadata);
 
 		}
-		
-		// get the metadata (Message) of the replica from the successor, s (i.e. active peer) of the file
-		
-		// save the metadata in the set succinfo.
-		
 		this.activeNodesforFile = succinfo;
 		
 		return succinfo;
@@ -156,10 +160,16 @@ public class FileManager {
 		// iterate over the activeNodesforFile
 		
 		// for each active peer (saved as Message)
+		for(Message peer : activeNodesforFile)
+
+			// use the primaryServer boolean variable contained in the Message class to check if it is the primary or not
+			if(peer.isPrimaryServer()){
+				// return the primary
+				return Util.getProcessStub(peer.getNodeIP(), peer.getPort());
+			}
+
 		
-		// use the primaryServer boolean variable contained in the Message class to check if it is the primary or not
-		
-		// return the primary
+
 		
 		return null; 
 	}
