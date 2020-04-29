@@ -1,15 +1,13 @@
 package no.hvl.dat110.aciotdevice.client;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.Charset;
+import java.util.Scanner;
 
-import com.google.gson.Gson;
-
-import rawhttp.core.RawHttp;
-import rawhttp.core.RawHttpRequest;
-import rawhttp.core.RawHttpResponse;
-import rawhttp.core.body.StringBody;
 
 public class RestClient {
 
@@ -18,33 +16,58 @@ public class RestClient {
 	}
 
 	private static String logpath = "/accessdevice/log";
+	private static final String host = "localhost";
+	private static final int port = 8080;
 
 	public void doPostAccessEntry(String message) {
 
 		// TODO: implement a HTTP POST on the service to post the message
+		try(Socket s = new Socket(Configuration.host, Configuration.port)){
+				// Construct the POST request
+				String postMessage = "{\n   \"message\": \"" + message + "\"\n}";
+				String httppostrequest = "POST " + logpath + " HTTP/1.1\r\n"
+						+ "Accept: application/json\r\n"
+						+ "Content-length: " + postMessage.length() + "\r\n"
+						+ "Host: localhost\r\n"
+						+ "Connection: close\r\n"
+						+ "\r\n"
+						+ postMessage
+						+ "\r\n";
+				System.out.println(httppostrequest);
 
-		AccessMessage accessMessage = new AccessMessage(message);
+			// sent the HTTP request
+			OutputStream output = s.getOutputStream();
 
-		try (Socket s = new Socket(Configuration.host, Configuration.port)) {
-			Gson gson = new Gson();
-			String jsonBody = gson.toJson(accessMessage);
+			PrintWriter pw = new PrintWriter(output, false);
 
-			RawHttp http = new RawHttp();
+			pw.print(httppostrequest);
+			pw.flush();
 
-			RawHttpRequest request = http.parseRequest(
-					"POST " + logpath + "\n" +
-							"Host: " + Configuration.host
-			).withBody(
-					new StringBody(jsonBody, "application/json")
-			);
+			// read the HTTP response
+			InputStream in = s.getInputStream();
 
-			request.writeTo(s.getOutputStream());
+			Scanner scan = new Scanner(in);
+			StringBuilder jsonresponse = new StringBuilder();
+			boolean header = true;
 
-			RawHttpResponse<Void> response = http.parseResponse(s.getInputStream());
+			while (scan.hasNext()) {
+				String nextline = scan.nextLine();
+				if (header) {
+					System.out.println(nextline);
+				} else {
+					jsonresponse.append(nextline);
+				}
 
-			System.out.println(response.eagerly());
+				if (nextline.isEmpty()) {
+					header = false;
+				}
+			}
+			System.out.println("BODY:");
+			System.out.println(jsonresponse.toString());
 
-		} catch (IOException ex) {
+			scan.close();
+
+		}catch (IOException ex){
 			System.err.println(ex);
 		}
 		
@@ -57,6 +80,56 @@ public class RestClient {
 		AccessCode code = null;
 		
 		// TODO: implement a HTTP GET on the service to get current access code
+		try (Socket s = new Socket(Configuration.host, Configuration.port)) {
+
+
+			// construct the GET request
+			String httpgetrequest = "GET " + codepath + " HTTP/1.1\r\n" + "Accept: application/json\r\n"
+					+ "Host: localhost\r\n" + "Connection: close\r\n" + "\r\n";
+
+			// sent the HTTP request
+			OutputStream output = s.getOutputStream();
+
+			PrintWriter pw = new PrintWriter(output, false);
+
+			pw.print(httpgetrequest);
+			pw.flush();
+
+			// read the HTTP response
+			InputStream in = s.getInputStream();
+
+			Scanner scan = new Scanner(in);
+			StringBuilder jsonresponse = new StringBuilder();
+			boolean header = true;
+
+			while (scan.hasNext()) {
+
+				String nextline = scan.nextLine();
+
+				if (header) {
+					System.out.println(nextline);
+				} else {
+					jsonresponse.append(nextline);
+				}
+
+				// simplified approach to identifying start of body: the empty line
+				if (nextline.isEmpty()) {
+					header = false;
+				}
+
+			}
+
+			//Gson gson = new Gson();
+			//code = gson.fromJson(jsonresponse.toString(), AccessCode.class)
+
+			System.out.println("BODY:");
+			System.out.println(jsonresponse.toString());
+
+			scan.close();
+
+		} catch (IOException ex) {
+			System.err.println(ex);
+		}
 		
 		return code;
 	}
