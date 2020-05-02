@@ -35,18 +35,15 @@ public class AccessLog {
 			e.printStackTrace();
 		}
 		return entry;
-		
 	}
 	
 	// TODO: clear the access entry log
 	public void clear() {
 		log.clear();
-		
 	}
 	
 	// TODO: return JSON representation of the access log
 	public String toJson () {
-    	
 		Gson gson = new Gson();
     	
     	return gson.toJson(log);
